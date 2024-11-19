@@ -1,0 +1,73 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <p>salam</p>
+        <form method="post" enctype="multipart/form-data" action="{% url 'print' %}">
+            {% csrf_token %}
+            <input type="text" name="search">
+            <input type="text" name="year">
+            <input type="submit">
+        </form>
+        <button type="submit" id="add_button" onclick="add()" >add</button>
+        <div id="space"></div>
+        {% if re %}
+        <p>
+            {% for ree in re %}
+            <p>{{ree.Country}}</p>
+            {% endfor %}
+
+        </p> 
+        {% else %} 
+        <p>
+            {% for k in kl %}
+            <p>{{k}}</p>
+            {% endfor %}
+
+        </p>   
+        {% endif %}
+
+
+        <script>
+            var count=0
+            function add(){
+               const sp= document.getElementById("space");
+               const rap= document.createElement("div");
+               const inp= document.createElement("input");
+               const de_b= document.createElement("button");
+               count+=1
+               inp.setAttribute("type","text");
+            //    inp.classList.add(`inp_field${count}`)
+            //    de_b.classList.add(`bu_field${count}`)
+               inp.setAttribute("id",`inp_field${count}`)
+               de_b.setAttribute("id",`inp_field${count}`)
+               rap.appendChild(inp);
+               rap.appendChild(de_b);
+               sp.appendChild(rap);
+            };
+            document.addEventListener("click",(e)=>{
+                console.log(e.target.id)
+                rt=e.target.id
+                if (rt.includes("inp_field")){
+                    bb=document.getElementById(rt).outerHTML = ""
+                    console.log(bb)
+                }
+                    
+                
+
+            })
+            // function del(){
+            // //    document.removeEventListener("click",(e)=>{
+            //     console.log("ssa;am")
+               
+             
+            // //    })
+        
+            // }
+            
+        </script>
+    </body>
+</html>
+
+
