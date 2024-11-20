@@ -2,8 +2,24 @@ from django.shortcuts import render
 from sqlalchemy import *
 # Create your views here.
 import pandas as pd
+from requests import session
+import requests
 
+def logged_in(f):
+    # @wraps(f)
+    def decorated_func(request,*args,**kwargs):
+        print(request.session.get("login"))
+        if request.session.get("login"):
+            return f(*args,**kwargs)
 
+        # if request.session:
+        #     return f(request,*args,**kwargs)
+        # else:
+        #     return redirect("/")
+        # return f(request, *args, **kwargs)
+    return decorated_func
+
+@logged_in
 def db(request):
     con=create_engine("mssql://@localhost/vvv?driver=ODBC Driver 17 for SQL Server")
     conn=con.connect()

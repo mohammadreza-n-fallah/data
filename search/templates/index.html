@@ -10,7 +10,11 @@
             <input type="text" name="year">
             <input type="submit">
         </form>
-        <button type="submit" id="add_button" onclick="add()" >add</button>
+        <button type="submit" id="add_button" onclick="addd()" >add</button>
+        Subjects: <select name="subject" id="subject"  onclick="addd(this.value)">
+            <option value="1" selected="selected">Select subject</option>
+            <option value="year" >year</option>
+          </select>
         <div id="space"></div>
         {% if re %}
         <p>
@@ -31,26 +35,37 @@
 
         <script>
             var count=0
-            function add(){
-               const sp= document.getElementById("space");
-               const rap= document.createElement("div");
-               const inp= document.createElement("input");
-               const de_b= document.createElement("button");
-               count+=1
-               inp.setAttribute("type","text");
-            //    inp.classList.add(`inp_field${count}`)
-            //    de_b.classList.add(`bu_field${count}`)
-               inp.setAttribute("id",`inp_field${count}`)
-               de_b.setAttribute("id",`inp_field${count}`)
-               rap.appendChild(inp);
-               rap.appendChild(de_b);
-               sp.appendChild(rap);
+            function yes(){
+                console.log("salam")
+            }
+            function addd(v){
+                console.log(v)
+                if (v=="year"){
+                    const sp= document.getElementById("space");
+                    const rap= document.createElement("div");
+                    const inp= document.createElement("input");
+                    const de_b= document.createElement("button");
+                    count+=1
+                    inp.setAttribute("type","text");
+                    //    inp.classList.add(`inp_field${count}`)
+                    //    de_b.classList.add(`bu_field${count}`)
+                    inp.setAttribute("id",`inp_field${count}`)
+                    de_b.setAttribute("id",`but_field${count}`)
+                    rap.appendChild(inp);
+                    rap.appendChild(de_b);
+                    sp.appendChild(rap);
+                }
+            
             };
             document.addEventListener("click",(e)=>{
                 console.log(e.target.id)
+             
                 rt=e.target.id
-                if (rt.includes("inp_field")){
-                    bb=document.getElementById(rt).outerHTML = ""
+                sl=rt.slice(-1)
+                console.log(sl)
+                if (rt==`but_field${sl}`){
+                    ff=document.getElementById(`but_field${sl}`).outerHTML = ""
+                    bb=document.getElementById(`inp_field${sl}`).outerHTML = ""
                     console.log(bb)
                 }
                     
