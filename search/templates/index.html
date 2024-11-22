@@ -1,16 +1,24 @@
 <html>
     <head>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     </head>
     <body>
         <p>salam</p>
-        <form method="post" enctype="multipart/form-data" action="{% url 'print' %}">
+{#        <form method="post" enctype="multipart/form-data" action="{% url 'print' %}">#}
+{#            {% csrf_token %}#}
+{#            <input type="text" name="search">#}
+{#            <input type="text" name="year">#}
+{#            <input type="submit" id="sub">#}
+{#        </form>#}
+        <form method="post" enctype="multipart/form-data" >
             {% csrf_token %}
             <input type="text" name="search">
             <input type="text" name="year">
-            <input type="submit">
+            <input type="submit" >
+
         </form>
-        <button type="submit" id="add_button" onclick="addd()" >add</button>
+{#        <button type="submit" id="add_button" onclick="addd()" >add</button>#}
+        <p  id="sub" >add</p>
         Subjects: <select name="subject" id="subject"  onclick="addd(this.value)">
             <option value="1" selected="selected">Select subject</option>
             <option value="year" >year</option>
@@ -31,9 +39,56 @@
 
         </p>   
         {% endif %}
+        <script>
+            {#    const dftg = document.getElementById("sub");#}
+            {#one.addEventListener("click",(e)=>{#}
+            {#    console.log("e.target.id")#}
+            $(document).ready(function (){
+               $('#sub').click(function (){
+                console.log("salam");
+                $.ajax({
+                    type:"POST",
+                    url:"/print/p/ ",
+                        headers: {
+                            'X-CSRFToken': "{{ csrf_token }}"
+                        },
+                    data:{
+                        "search":$('input[name="search"]').val()
+                    },
+                    success:function (data){
+                        console.log(data)
+                        console.log("by")
 
+                    }
+                })
+            })
+
+            })
+        </script>
 
         <script>
+            const one = document.getElementById("sub");
+            one.addEventListener("click",(e)=>{
+                console.log("e.target.id")
+            $(document).ready(function (){
+               $('#sub').click(function (){
+                console.log("salam");
+                {#$.ajax({#}
+                {#    type:"POST",#}
+                {#    url:"print ",#}
+                {#        headers: {#}
+                {#    'X-CSRFToken': csrfToken#}
+                {#},#}
+                {#    success:function (data){#}
+                {#        console.log(data)#}
+                {#        console.log("by")#}
+                {##}
+                {#    }#}
+                {#})#}
+            })
+
+            })
+
             var count=0
             function yes(){
                 console.log("salam")
