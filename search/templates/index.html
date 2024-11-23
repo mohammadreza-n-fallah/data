@@ -24,6 +24,7 @@
             <option value="year" >year</option>
           </select>
         <div id="space"></div>
+        <div id="re_a"></div>
         {% if re %}
         <p>
             {% for ree in re %}
@@ -53,11 +54,31 @@
                             'X-CSRFToken': "{{ csrf_token }}"
                         },
                     data:{
-                        "search":$('input[name="search"]').val()
+                        "search":$('input[name="search"]').val(),
+                        "search_a":$('input[name="inp_a"]').val()
                     },
                     success:function (data){
-                        console.log(data)
-                        console.log("by")
+                        console.log(data);
+                        const parser=JSON.parse(data)
+{#                        $("#space").html(`<table>#}
+{#<tr>#}
+{#    <th>${parser["Country"]} </th>#}
+{#</tr>#}
+{#<tr>#}
+{#    <td>${parser["Year"]}</td>#}
+{#</tr>#}
+{#                                        #}
+{#                                        </table>`);#}
+                $("#re_a").html(`<table>
+<tr>
+    <th>${parser["Country"]} </th>
+</tr>
+<tr>
+    <td>${parser["Year"]}</td>
+</tr>
+                                        
+                                        </table>`);
+                        console.log("by");
 
                     }
                 })
@@ -67,12 +88,12 @@
         </script>
 
         <script>
-            const one = document.getElementById("sub");
-            one.addEventListener("click",(e)=>{
-                console.log("e.target.id")
-            $(document).ready(function (){
-               $('#sub').click(function (){
-                console.log("salam");
+            {#const one = document.getElementById("sub");#}
+            {#one.addEventListener("click",(e)=>{#}
+            {#    console.log("e.target.id"),#}
+            {#$(document).ready(function (){#}
+            {#   $('#sub').click(function (){#}
+            {#    console.log("salam");#}
                 {#$.ajax({#}
                 {#    type:"POST",#}
                 {#    url:"print ",#}
@@ -85,9 +106,9 @@
                 {##}
                 {#    }#}
                 {#})#}
-            })
-
-            })
+            {#})#}
+            {##}
+            {#})#}
 
             var count=0
             function yes(){
@@ -97,7 +118,8 @@
                 console.log(v)
                 if (v=="year"){
                     const sp= document.getElementById("space");
-                    const rap= document.createElement("div");
+                    const rap= document.createElement("form");
+                    
                     const inp= document.createElement("input");
                     const de_b= document.createElement("button");
                     count+=1
@@ -106,6 +128,11 @@
                     //    de_b.classList.add(`bu_field${count}`)
                     inp.setAttribute("id",`inp_field${count}`)
                     de_b.setAttribute("id",`but_field${count}`)
+                     rap.setAttribute("method",'POST')
+                    rap.setAttribute("enctype",'"multipart/form-data"')
+                    inp.setAttribute("name",'inp_a')
+                    de_b.setAttribute("name",'but_a')
+                   
                     rap.appendChild(inp);
                     rap.appendChild(de_b);
                     sp.appendChild(rap);

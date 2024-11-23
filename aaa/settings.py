@@ -80,7 +80,7 @@ DATABASES = {
         "ENGINE": "mssql",
         "NAME": "vvv",
         "USER": "sa",
-        "PASSWORD": "1234",
+        "PASSWORD": "9055",
         "HOST": 'localhost',
         # "PORT": "1443",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 

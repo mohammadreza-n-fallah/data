@@ -28,7 +28,7 @@ class Login(View):
         print(password)
         request.session["username"]=username
         request.session["password"] = password
-        ddd="login"
+        ddd="LOGIN"
         st = text(f"SELECT * FROM {ddd} WHERE (username='{username}' AND password='{password}') ")
         rs = conn.execute(st)
         kk=rs.fetchall()
