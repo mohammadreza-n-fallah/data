@@ -1,0 +1,17 @@
+.formm div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+.formm div label{
+   width: 40px;
+}
+
+
+.formm div input{
+   width: 180px;
+}
+
