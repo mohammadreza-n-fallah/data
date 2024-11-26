@@ -1,0 +1,276 @@
+<html class="w-full">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="w-full">
+<div class="w-screen overflow-x-auto  h-40 bg-gray-300 flex flex-col">
+    {#        <form method="post" enctype="multipart/form-data" action="{% url 'print' %}">#}
+    {#            {% csrf_token %}#}
+    {#            <input type="text" name="search">#}
+    {#            <input type="text" name="year">#}
+    {#            <input type="submit" id="sub">#}
+    {#        </form>#}
+    <div class="flex  flex-row items-center p-4 gap-2">
+        <form method="post" enctype="multipart/form-data" action="{% url 'print_db' %}">
+            {% csrf_token %}
+            {#                <label >country:</label>#}
+            <input class="rounded h-8" type="text" name="name" placeholder="name">
+            {#                <label>year:</label>#}
+            <input class="rounded h-8" type="text" name="family" placeholder="family">
+            {#                <label>rank:</label>#}
+            <input class="rounded h-8" type="text" name="national_number" placeholder="national_number">
+            <input class="rounded h-8" type="text" name="email" placeholder="email">
+            <input class="rounded h-8" type="text" name="phone" placeholder="phone">
+            <input class="h-8 bg-blue-300 cursor-pointer  rounded" type="submit">
+        </form>
+    </div>
+    {#        <button type="submit" id="add_button" onclick="addd()" >add</button>#}
+    <div class="flex p-4">
+        <select class="rounded" name="subject" id="subject" onchange="addd(this.value)">
+            <option id="selec" value="1" selected="selected">Select subject</option>
+            <option value="year">family</option>
+        </select>
+
+        <input class="rounded h-8 mx-2" type="text" name="inp_a2 " placeholder="name">
+        <div id="space"></div>
+        <p class="w-12 h-8 bg-blue-400 rounded text-center" id="sub">add</p>
+
+    </div>
+</div>
+<div id="re_a"></div>
+<table class=" w-full border-2 border-solid border-black rounded">
+
+{#    <tr>#}
+{#        #}
+{#        <th class=" border-4 border-solid border-black">NAME</th>#}
+{#        <th class=" border-4 border-solid border-black">FAMILY</th>#}
+{#        <th class=" border-4 border-solid border-black">NATIONAL__NUMBER</th>#}
+{#    </tr>#}
+    <tr>
+        {% for v in lii %}
+            <th class=" border-4 border-solid border-black">{{ v }}</th>
+{#            <th class=" border-4 border-solid border-black">FAMILY</th>#}
+{#            <th class=" border-4 border-solid border-black">NATIONAL__NUMBER</th>#}
+         {% endfor %}
+    </tr>
+
+
+    {% if re %}
+
+        {#        <p>#}
+        {% for ree in re %}
+            <tr class=" text-center border-2 border-solid border-black">
+                <td>{{ ree.name }}</td>
+                <td>{{ ree.family }}</td>
+                <td>{{ ree.national_number }}</td>
+            </tr>
+
+        {% endfor %}
+        {#        </p> #}
+
+
+    {% else %}
+
+        {#        <p>#}
+           {% for k in kl %}
+            <tr class="text-center border-2 border-solid border-black">
+{#             <td>{{ k.family }}</td>#}
+{#             <td>{{ k.national_number }}</td>#}
+            {% for h in k %}
+                <td>{{ h }} </td>
+{#                <td>{{ k.family }}</td>#}
+{#                <td>{{ k.national_number }}</td>#}
+            {% endfor %}    
+            </tr>
+        {% endfor %}
+{#        {% for k in kl %}#}
+{#            <tr class="text-center border-2 border-solid border-black">#}
+          
+{#                <td>{{ k.name }} </td>#}
+{#                <td>{{ k.family }}</td>#}
+{#                <td>{{ k.national_number }}</td>#}
+ 
+{#            </tr>#}
+{#        {% endfor %}#}
+        {#        </p>   #}
+
+
+    {% endif %}
+
+
+</table>
+<script>
+    {#    const dftg = document.getElementById("sub");#}
+    {#one.addEventListener("click",(e)=>{#}
+    {#    console.log("e.target.id")#}
+    $(document).ready(function () {
+        $('#sub').click(function () {
+            console.log("salam");
+            $.ajax({
+                type: "POST",
+                url: "/print/p/ ",
+                headers: {
+                    'X-CSRFToken': "{{ csrf_token }}"
+                },
+                data: {
+                    "search": $('input[name="search"]').val(),
+
+                    "search_a2": $('input[name="inp_a2"]').val(),
+                    "search_a": $('input[name="inp_a"]').val(),
+                },
+                success: function (data) {
+                    console.log(data);
+                    const parser = JSON.parse(data)
+                    {#                        $("#space").html(`<table>#}
+                    {#<tr>#}
+                    {#    <th>${parser["Country"]} </th>#}
+                    {#</tr>#}
+                    {#<tr>#}
+                    {#    <td>${parser["Year"]}</td>#}
+                    {#</tr>#}
+                    {#                                        #}
+                    {#                                        </table>`);#}
+                    $("#re_a").html(`<table>
+                        <tr>
+                            <th>${parser["Country"]} </th>
+                        </tr>
+                        <tr>
+                            <td>${parser["Year"]}</td>
+                        </tr>
+                                                            
+                    </table>`);
+                    console.log("by");
+
+                }
+            })
+        })
+
+    })
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+    {#const one = document.getElementById("sub");#}
+    {#one.addEventListener("click",(e)=>{#}
+    {#    console.log("e.target.id"),#}
+    {#$(document).ready(function (){#}
+    {#   $('#sub').click(function (){#}
+    {#    console.log("salam");#}
+    {#$.ajax({#}
+    {#    type:"POST",#}
+    {#    url:"print ",#}
+    {#        headers: {#}
+    {#    'X-CSRFToken': csrfToken#}
+    {#},#}
+        {#        success:function (data){#}
+        {#            console.log(data)#}
+        {#            console.log("by")#}
+        {##}
+        {#        }#}
+        {#    })#}
+        {#        })#}
+        {##}
+        {#            })#}
+
+        var count = 0
+
+        function yes() {
+            console.log("salam")
+        }
+
+        function addd(v) {
+            select_box = document.getElementById("subject")
+            selected_index = select_box.options[select_box.selectedIndex].value
+            array =["family","name"]
+            {#selin = document.getElementById("subject");#}
+            {#console.log(selectElement.textContent)#}
+            {#// Iterate through options#}
+            {#Array.from(selin.options).forEach(option => {#}
+            {#    option.selected = option.defaultSelected; // Reset to default#}
+            {#});#}
+
+
+            console.log(v)
+            ye = document.getElementsByName("inp_a")
+            console.log(typeof (ye))
+            if ((selected_index=="year")  && (ye.length == 0) ) {
+                const selected = document.getElementById("subject");
+                const sp = document.getElementById("space");
+                const rap = document.createElement("form");
+
+                const inp = document.createElement("input");
+                const de_b = document.createElement("button");
+                count += 1
+                sp.setAttribute("class", "flex")
+                inp.setAttribute("type", "text");
+                //    inp.classList.add(`inp_field${count}`)
+                //    de_b.classList.add(`bu_field${count}`)
+                inp.setAttribute("id", `inp_field${count}`)
+                de_b.setAttribute("id", `but_field${count}`)
+                de_b.textContent = "delete"
+                rap.setAttribute("method", 'POST')
+                rap.setAttribute("enctype", '"multipart/form-data"')
+                inp.setAttribute("name", 'inp_a')
+                inp.setAttribute("placeholder", 'family')
+                inp.setAttribute("class", 'h-8 rounded ')
+                de_b.setAttribute("name", 'but_a')
+                de_b.setAttribute("class", 'h-8 rounded bg-red-400 text-white mx-2')
+
+                rap.appendChild(inp);
+                rap.appendChild(de_b);
+                sp.appendChild(rap);
+                uu = document.getElementById("inp_field${count}")
+                console.log(typeof (uu))
+
+            }
+            selected_val = document.getElementById("selec")
+            selected_vall = selected_val.getAttribute("value")
+            console.log("salllm")
+            selectElement = document.getElementById("subject");
+            console.log(selectElement.textContent)
+            // Iterate through options
+            Array.from(selectElement.options).forEach(option => {
+                option.selected = option.defaultSelected; // Reset to default
+            });
+
+            console.log("Selection reset to default");
+            {#          $("#selec option").each(function () {#}
+            {#// check if the option is the default; if yes, then set selected to true#}
+            {#                if (this.defaultSelected) {#}
+            {#                    this.selected = true;#}
+            {#                    console.log("hello")#}
+            {#                    return;#}
+            {#                 }#}
+            {#                else {#}
+            {#                    this.selected = false;#}
+            {#                    console.log("hello")#}
+            {#                 }#}
+            {#        });#}
+
+        };
+        document.addEventListener("click", (e) => {
+            console.log(e.target.id)
+            rt = e.target.id
+            sl = rt.slice(-1)
+            console.log(sl)
+            if (rt == `but_field${sl}`) {
+                ff = document.getElementById(`but_field${sl}`).outerHTML = ""
+                bb = document.getElementById(`inp_field${sl}`).outerHTML = ""
+                console.log(bb)
+            }
+        })
+    // function del(){
+    // //    document.removeEventListener("click",(e)=>{
+    //     console.log("ssa;am")
+
+
+    // //    })
+
+    // }
+
+</script>
+</body>
+</html>
+
+

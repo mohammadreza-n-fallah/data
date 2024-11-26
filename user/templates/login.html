@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% comment %} {%load crispy_forms_tags %}  {% endcomment %}
+{% load static %}
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'index.js' %}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <div class="{{ message.tags }} ">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+<div class="w-7/12 h-96 bg-gray-400 m-auto my-40 flex flex-row  rounded-xl">
+    {#        <h1 class="flex items-center justify-center m-auto relative -top-6 w-2/3 h-16 bg-blue-300 rounded-xl">REGISTER LOGIN  PAGE:</h1>#}
+    <div class="w-1/2 h-full flex flex-col justify-center items-center">
+
+
+        <form dir="rtl" enctype="multipart/form-data" method="post"
+              class=" flex flex-col w-full h-full gap-2 justify-center items-center ">
+            {% csrf_token %}
+            <div class="flex ">
+                <div class="flex flex-col gap-2">
+
+                    {{ form }}
+                </div>
+
+                <i class="far fa-eye flex items-end pb-3 -mr-5" id="togglePassword" onclick="Pass()"></i>
+            </div>
+
+            <button name="login" value="login" type="submit"
+                    class="w-40 h-12  rounded-xl relative   bg-blue-500 text-white"><a>login</a></button>
+            {#                 <button name="register" value="register" type="submit" class= "w-40 h-12  rounded-xl relative   bg-blue-500 text-white"><a >register</a></button>#}
+        </form>
+    </div>
+    <div class="w-1/2 h-full flex flex-col justify-center items-center">
+        <div class="flex gap-3 flex-col " dir="rtl">
+            <img src="{% static "ser.jpg" %}" class="w-44 h-44 rounded-2xl">
+            <div class="w-full ">
+                <h1 class="text-2xl w-full text-center">سامانه جستجو </h1>
+                {#                      <p>به سامانه اکانت ها خوش آمدید</p>#}
+            </div>
+
+        </div>
+        {#            <p class="text-center p-4">#}
+        {#                این سامانه توسط تیم پشتیبانی برای دسترسی سریع تر به اکانت ها طراحی شده است.#}
+        {#            </p>#}
+
+        <p>
+            powerd by iran
+        </p>
+
+    </div>
+</div>
+</body>
+
+
+</html>
+
+
+{#<html>#}
+{#    <head>#}
+{#    </head>#}
+{#    <body>#}
+{#        <form method="post" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            {{form}}#}
+{#            <input type="submit" >#}
+{#        </form>#}
+{#    </body>#}
+{#</html>    #}
