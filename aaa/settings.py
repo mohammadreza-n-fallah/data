@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'search',
     'user',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -78,12 +79,23 @@ WSGI_APPLICATION = 'aaa.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "mssql",
-        "NAME": "vvv",
+        "NAME": "django",
         "USER": "sa",
-        "PASSWORD": "9055",
+        "PASSWORD": "1234",
         "HOST": 'localhost',
         # "PORT": "1443",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
+                    'extra_params': 'TrustServerCertificate=yes;',
+        },
+    },
+    "users": {
+        "ENGINE": "mssql",
+        "NAME": "data",
+        "USER": "sa",
+        "PASSWORD": "1234",
+        "HOST": 'localhost',
+        # "PORT": "1443",
+        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server",
                     'extra_params': 'TrustServerCertificate=yes;',
         },
     },
@@ -124,9 +136,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+
+COMPRESS_ROOT = BASE_DIR / 'static'
+
+COMPRESS_ENABLED = True
+
+STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
+
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'user/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -19,6 +19,7 @@
     <orderEntry type="jdk" jdkName="Python 3.13 (jan)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />

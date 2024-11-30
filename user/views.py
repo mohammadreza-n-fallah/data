@@ -5,7 +5,7 @@ from sqlalchemy import *
 # Create your views here.
 from .forms import *
 
-con = create_engine("mssql://@localhost/vvv?driver=ODBC Driver 17 for SQL Server")
+con = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
 conn = con.connect()
 
 
@@ -23,7 +23,7 @@ class Login(View):
         print(password)
         request.session["username"] = username
         request.session["password"] = password
-        ddd = "LOGIN"
+        ddd = "usernames"
         st = text(f"SELECT * FROM {ddd} WHERE (username='{username}' AND password='{password}') ")
         rs = conn.execute(st)
         kk = rs.fetchall()
@@ -31,6 +31,6 @@ class Login(View):
         try:
             if kk[0]:
                 self.request.session["login"] = "login"
-                return redirect("print")
+                return redirect("print_db")
         except:
             return redirect("login")

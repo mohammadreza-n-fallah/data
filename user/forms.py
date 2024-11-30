@@ -21,6 +21,7 @@ class LoginForm(forms.ModelForm):
                 'placeholder': 'نام کاربری...'
             }),
             'password': forms.TextInput(attrs={
+                'id':"id_password",
                 'class': "form-control",
                 'style': 'width: 200px;border-radius: 8px;height:40px;border: 4px solid white ;padding: 5px;',
                 'placeholder': 'رمز...'
