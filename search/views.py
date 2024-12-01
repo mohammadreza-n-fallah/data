@@ -57,7 +57,12 @@ def db(request):
     vb = text(f"SELECT name AS [text()] FROM sys.columns WHERE object_id = OBJECT_ID('dbo.data2') ")
     vm = conn3.execute(vb)
     ress = vm.fetchall()
+    combined_li=[]
     lii = [row[0].upper() for row in ress]
+    for l in lii:
+        if l[0:-1] not in combined_li:
+            combined_li.append(l)
+
     kkss = text("""
 
     CREATE OR ALTER PROCEDURE SearchProducts
@@ -145,20 +150,35 @@ def db(request):
     # print("Query Results:", result_data)
     # for kk in kl:
     #     print(kk)
-    print(lii)
+    print(combined_li)
     # result_datadict = [row for row in kl]
     # print(result_datadict)
     l2=[]
     l=[]
     for row in kl:
         row_dict = dict(row._mapping)
-        for i in row_dict.values():
-            l.append(i)
-        l2.append(l)
 
-        print(l2)
+
+
         json_data = json.dumps(row_dict)
         print(json_data)
+        combined={}
+        mm=[]
+        for key, value in row_dict.items():
+            if key[0:-1] in combined:
+                if isinstance(combined[key[0:-1]], list):
+                    combined[key[0:-1]].append(value)
+                else:
+                    combined[key[0:-1]] = [combined[key[0:-1]],value]
+            else:
+                combined[key] = value
+        print("fi",combined)
+        for i in combined.values():
+            l.append(i)
+        l2.append(l)
+        print(l2)
+
+
         return JsonResponse(l2, safe=False)
 
     lo = text(f"INSERT INTO {logg} (username,name,family,national_number,email,phone) VALUES (N'{username}',N'{ff}',N'{yy}',N'{rr}',N'{ee}',N'{pp}')")
@@ -168,7 +188,7 @@ def db(request):
 
 
     conn4.close()
-    return render(request, "index.html", {"lii": lii, })
+    return render(request, "index.html", {"lii": combined_li, })
     # return render(request, "index.html",)
 
     # if ff and yy and rr:

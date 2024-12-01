@@ -147,13 +147,23 @@
                
                 success: function (data) {
                     console.log(data);
+                  
                     for ( let k in data){
                         var ss=data[k]
                             console.log(data[k])
-                        for (let i in ss){
-                               console.log(ss[i])
-                            document.getElementById("aj").innerHTML+=`<td>${ss[i]}</td>`
-                            }
+                
+                            for (let i in ss){
+                            var cc=ss[i]
+                               console.log(cc)
+                           
+                                       
+                                            document.getElementById("aj").innerHTML += `<td>${cc}</td>`;
+                                        
+                                    }
+                                
+                              
+                                     
+                    
                     }
                   
      
