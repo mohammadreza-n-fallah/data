@@ -127,6 +127,7 @@
     {#one.addEventListener("click",(e)=>{#}
     {#    console.log("e.target.id")#}
     $(document).ready(function () {
+        
         $('#sub').click(function () {
             console.log("salam");
             $.ajax({
@@ -144,29 +145,60 @@
                     "family": $('input[name="family"]').val(),
                     "national_number": $('input[name="national_number"]').val(),
                 },
-               
+
                 success: function (data) {
                     console.log(data);
-                  
-                    for ( let k in data){
-                        var ss=data[k]
-                            console.log(data[k])
-                
-                            for (let i in ss){
-                            var cc=ss[i]
-                               console.log(cc)
-                           
-                                       
-                                            document.getElementById("aj").innerHTML += `<td>${cc}</td>`;
-                                        
-                                    }
-                                
-                              
-                                     
                     
+                                        // To avoid duplicates in zz
+                    let zz = [];
+                    for (let k in data) {
+                        if (!zz.includes(data[k])) {
+                            zz.push(data[k]);
+                        }
                     }
-                  
-     
+                
+                    // Build HTML content once
+                    let htmlContent = '';
+                    zz.forEach(row => {
+                        if (Array.isArray(row)) {
+                            row.forEach(cell => {
+                                htmlContent += `<td>${cell}</td>`;
+                            });
+                        } else {
+                            htmlContent += `<td>${row}</td>`;
+                        }
+                    });
+                
+                    // Append to element with ID 'aj'
+                    document.getElementById("aj").innerHTML = htmlContent;
+                    
+                 
+
+                    {#for ( let k in data){#}
+                    {#    if (!(data[k] in zz)){#}
+                    {#        zz.push(data[k])#}
+                    {#    }#}
+                    {##}
+                    {#    var ss=data[k]#}
+                    {#        console.log(data[k])#}
+                    {#    for (let v in zz){#}
+                    {#        nn=zz[v]#}
+                    {#         for (let i in nn){#}
+                    {#        var cc=nn[i]#}
+                    {#           console.log(cc)#}
+                    {##}
+                    {#            if (!(document.getElementById("aj").innerHTML += `<td>${cc}</td>`)){#}
+                    {#                document.getElementById("aj").innerHTML += `<td>${cc}</td>`;#}
+                    {#            }#}
+                    {#                        #}
+                    {##}
+                    {#                }#}
+                    {##}
+                    {#    }#}
+                    {##}
+                    {#}#}
+                    {##}
+                    {#console.log(zz)#}
                     {#const parser = JSON.parse(data)#}
                     {#                        $("#space").html(`<table>#}
                     {#<tr>#}
