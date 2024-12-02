@@ -28,7 +28,7 @@ def class_logged_in(f):
     return decorated_func
 
 
-@logged_in
+# @logged_in
 def db(request):
     con = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
     conn = con.connect()
@@ -36,158 +36,174 @@ def db(request):
     conn2 = con2.connect()
     con3 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
     conn3 = con3.connect()
-    con4 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
-    conn4 = con4.connect()
-    con5 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
-    conn5 = con5.connect()
-    aalltt = request.POST.get("namee")
-    ff = request.POST.get("name", "")
-    yy = request.POST.get("family", "")
-    rr = request.POST.get("national_number", "")
-    ee = request.POST.get("email", "")
-    pp = request.POST.get("phone", "")
-    print(aalltt)
-    print(ff)
-    dddd = "data2"
-    logg = "log"
-    username = request.session.get("username")
-    password = request.session.get("password")
-    print(username)
-    print(password)
-    vb = text(f"SELECT name AS [text()] FROM sys.columns WHERE object_id = OBJECT_ID('dbo.data2') ")
-    vm = conn3.execute(vb)
-    ress = vm.fetchall()
-    combined_li=[]
-    lii = [row[0].upper() for row in ress]
-    for l in lii:
-        if l[0:-1] not in combined_li:
-            combined_li.append(l)
+    # con4 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
+    # conn4 = con4.connect()
+    # con5 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
+    # conn5 = con5.connect()
+    # aalltt = request.POST.get("namee")
+    with con.connect() as connection:
+        ff = request.POST.get("name", "")
+        yy = request.POST.get("family", "")
+        rr = request.POST.get("national_number", "")
+        ee = request.POST.get("email", "")
+        pp = request.POST.get("phone", "")
+        # print(aalltt)
+        print(ff)
+        dddd = "data2"
+        logg = "log"
+        username = request.session.get("username")
+        password = request.session.get("password")
+        print(username)
 
-    kkss = text("""
+        # print(password)
+        vb = text(f"SELECT name AS [text()] FROM sys.columns WHERE object_id = OBJECT_ID('dbo.data2') ")
+        vm = connection.execute(vb)
 
-    CREATE OR ALTER PROCEDURE SearchProducts
-      @Name NVARCHAR(50) = NULL,
-        @Family NVARCHAR(50) = NULL,
-        @National_Number NVARCHAR(50) = NULL,
-        @Email NVARCHAR(50) = NULL,
-        @Phone NVARCHAR(50) = NULL
-        AS
-        BEGIN
-            SET NOCOUNT ON;
-              IF @Name IS NULL AND @Family IS NULL AND @National_Number IS NULL AND @Email IS NULL AND @Phone IS NULL
-                BEGIN
-                    SELECT TOP 0 * FROM data2;
-                    RETURN;
-                END;
-        
-            DECLARE @SQL NVARCHAR(MAX);
-            DECLARE @Params NVARCHAR(MAX);
-        
-            -- Base query
-            SET @SQL = 'SELECT * FROM data2 WHERE 1=1';
-        
-            -- Build conditions dynamically
-            IF @Name IS NOT NULL
-                SET @SQL += ' AND (name = @Name OR name2=@Name OR name3=@Name)';
-        
-            IF @Family IS NOT NULL
-                SET @SQL += ' AND (family=@Family OR family2=@Family ) ';
-        
-            IF @National_Number IS NOT NULL
-                SET @SQL += ' AND (national_number = @National_Number OR national_number2 = @National_Number)';
-        
-            IF @Email IS NOT NULL
-                SET @SQL += ' AND (email = @Email OR email2 = @Email OR email3 = @Email )';
-        
-            IF @Phone IS NOT NULL
-                SET @SQL += ' AND (phone = @Phone OR phone2 = @Phone OR phone3 = @Phone OR phone4 = @Phone OR phone5 = @Phone )';
-        
-            -- Define parameters
-            SET @Params = '@Name NVARCHAR(50), @Family NVARCHAR(50), @National_Number NVARCHAR(50), @Email NVARCHAR(50), @Phone NVARCHAR(50)';
-            PRINT @SQL;
-            -- Execute the query
-            EXEC sp_executesql @SQL, @Params, @Name, @Family, @National_Number, @Email, @Phone;
-        END;
+        ress = vm.fetchall()
+        combined_li=[]
+        lii = [row[0].upper() for row in ress]
+        for l in lii:
+            if l[0:-1] not in combined_li:
+                combined_li.append(l)
 
-""")
+        lo = text(
+            f"INSERT INTO {logg} (username,name,family,national_number,email,phone) VALUES (N'{username}',N'{ff}',N'{yy}',N'{rr}',N'{ee}',N'{pp}')")
+        print("lo", lo)
+        loo = connection.execute(lo)
+        connection.commit()
 
-    kkssv = conn4.execute(kkss)
-
-    print("Stored procedure created/updated successfully.")
-
-
-    execute_procedure = text(f"""
-        EXEC SearchProducts 
-            @Name = {f"N'{ff}'" if ff else 'NULL'} ,
-            @Family = {f"N'{yy}'" if yy else 'NULL'},
-            @National_Number = {f"N'{rr}'" if rr else 'NULL'},
-            @Email = {f"N'{ee}'" if ee else 'NULL'},
-            @Phone = {f"N'{pp}'" if pp else 'NULL'}
+        kkss = text("""
+    
+        CREATE OR ALTER PROCEDURE SearchProducts
+          @Name NVARCHAR(50) = NULL,
+            @Family NVARCHAR(50) = NULL,
+            @National_Number NVARCHAR(50) = NULL,
+            @Email NVARCHAR(50) = NULL,
+            @Phone NVARCHAR(50) = NULL
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+                  IF @Name IS NULL AND @Family IS NULL AND @National_Number IS NULL AND @Email IS NULL AND @Phone IS NULL
+                    BEGIN
+                        SELECT TOP 0 * FROM data2;
+                        RETURN;
+                    END;
             
-    """)
-    # execute_procedure2 = text(f"""
-    #      EXEC SearchProducts
-    #          @Name = {f"N'{ff}'" if ff else 'NULL'} ,
-    #          @Family = {f"N'{yy}'" if yy else 'NULL'},
-    #          @National_Number = {f"N'{rr}'" if rr else 'NULL'},
-    #          @Email = {f"N'{ee}'" if ee else 'NULL'},
-    #          @Phone = {f"N'{pp}'" if pp else 'NULL'}
-    #
-    #  """)
+                DECLARE @SQL NVARCHAR(MAX);
+                DECLARE @Params NVARCHAR(MAX);
+            
+                -- Base query
+                SET @SQL = 'SELECT * FROM data2 WHERE 1=1';
+            
+                -- Build conditions dynamically
+                IF @Name IS NOT NULL
+                    SET @SQL += ' AND (name = @Name OR name2=@Name OR name3=@Name)';
+            
+                IF @Family IS NOT NULL
+                    SET @SQL += ' AND (family=@Family OR family2=@Family ) ';
+            
+                IF @National_Number IS NOT NULL
+                    SET @SQL += ' AND (national_number = @National_Number OR national_number2 = @National_Number)';
+            
+                IF @Email IS NOT NULL
+                    SET @SQL += ' AND (email = @Email OR email2 = @Email OR email3 = @Email )';
+            
+                IF @Phone IS NOT NULL
+                    SET @SQL += ' AND (phone = @Phone OR phone2 = @Phone OR phone3 = @Phone OR phone4 = @Phone OR phone5 = @Phone )';
+            
+                -- Define parameters
+                SET @Params = '@Name NVARCHAR(50), @Family NVARCHAR(50), @National_Number NVARCHAR(50), @Email NVARCHAR(50), @Phone NVARCHAR(50)';
+                PRINT @SQL;
+                -- Execute the query
+                EXEC sp_executesql @SQL, @Params, @Name, @Family, @National_Number, @Email, @Phone;
+            END;
+    
+        """)
 
-    kl = conn4.execute(
-        execute_procedure
-        # {
-        #     "name": 'אופיר',
-        # #     "family": yy,
-        # #     "national_number": rr,
-        #     "email": "shakedmiriam@gmail.com" or None,
-        # #     "phone": pp,
-        # }
-    )
+        kkssv = connection.execute(kkss)
 
-    # result_data = [row for row in kl]
-    # print("Query Results:", result_data)
-    # for kk in kl:
-    #     print(kk)
-    print(combined_li)
-    # result_datadict = [row for row in kl]
-    # print(result_datadict)
-    l2=[]
-    l=[]
-    for row in kl:
-        row_dict = dict(row._mapping)
+        print("Stored procedure created/updated successfully.")
 
 
+        execute_procedure = text(f"""
+            EXEC SearchProducts 
+                @Name = {f"N'{ff}'" if ff else 'NULL'} ,
+                @Family = {f"N'{yy}'" if yy else 'NULL'},
+                @National_Number = {f"N'{rr}'" if rr else 'NULL'},
+                @Email = {f"N'{ee}'" if ee else 'NULL'},
+                @Phone = {f"N'{pp}'" if pp else 'NULL'}
+                
+        """)
+        # execute_procedure2 = text(f"""
+        #      EXEC SearchProducts
+        #          @Name = {f"N'{ff}'" if ff else 'NULL'} ,
+        #          @Family = {f"N'{yy}'" if yy else 'NULL'},
+        #          @National_Number = {f"N'{rr}'" if rr else 'NULL'},
+        #          @Email = {f"N'{ee}'" if ee else 'NULL'},
+        #          @Phone = {f"N'{pp}'" if pp else 'NULL'}
+        #
+        #  """)
 
-        json_data = json.dumps(row_dict)
-        print(json_data)
-        combined={}
-        mm=[]
-        for key, value in row_dict.items():
-            if key[0:-1] in combined:
-                if isinstance(combined[key[0:-1]], list):
-                    combined[key[0:-1]].append(value)
+        kl = connection.execute(
+            execute_procedure
+            # {
+            #     "name": 'אופיר',
+            # #     "family": yy,
+            # #     "national_number": rr,
+            #     "email": "shakedmiriam@gmail.com" or None,
+            # #     "phone": pp,
+            # }
+        )
+
+
+        # result_data = [row for row in kl]
+        # print("Query Results:", result_data)
+        # for kk in kl:
+        #     print(kk)
+        print(combined_li)
+        # result_datadict = [row for row in kl]
+        # print(result_datadict)
+
+
+
+
+
+        l2=[]
+        l=[]
+        for row in kl:
+            row_dict = dict(row._mapping)
+            json_data = json.dumps(row_dict)
+            print(json_data)
+            combined={}
+            mm=[]
+            for key, value in row_dict.items():
+                if key[0:-1] in combined:
+                    if isinstance(combined[key[0:-1]], list):
+                        combined[key[0:-1]].append(value)
+                    else:
+                        combined[key[0:-1]] = [combined[key[0:-1]],value]
                 else:
-                    combined[key[0:-1]] = [combined[key[0:-1]],value]
-            else:
-                combined[key] = value
-        print("fi",combined)
-        for i in combined.values():
-            l.append(i)
-        l2.append(l)
-        print(l2)
+                    combined[key] = value
+            print("fi",combined)
+            for i in combined.values():
+                l.append(i)
+            l2.append(l)
+            print(l2)
 
 
-        return JsonResponse(l2, safe=False)
 
-    lo = text(f"INSERT INTO {logg} (username,name,family,national_number,email,phone) VALUES (N'{username}',N'{ff}',N'{yy}',N'{rr}',N'{ee}',N'{pp}')")
-    print(lo)
-    loo = conn5.execute(lo)
-    conn5.commit()
+            return JsonResponse(l2, safe=False)
+        # connection.commit()
 
 
-    conn4.close()
+
+
+
+
+
+
+
+
     return render(request, "index.html", {"lii": combined_li, })
     # return render(request, "index.html",)
 

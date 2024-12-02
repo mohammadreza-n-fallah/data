@@ -135,11 +135,11 @@
 
 /*
 1. Use a consistent sensible line-height in all browsers.
-2. Prevent adjustments of fontawsome size after orientation changes in iOS.
+2. Prevent adjustments of font size after orientation changes in iOS.
 3. Use a more readable tab size.
-4. Use the user's configured `sans` fontawsome-family by default.
-5. Use the user's configured `sans` fontawsome-feature-settings by default.
-6. Use the user's configured `sans` fontawsome-variation-settings by default.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
 7. Disable tap highlights on iOS
 */
 
@@ -201,7 +201,7 @@ abbr:where([title]) {
 }
 
 /*
-Remove the default fontawsome size and weight for headings.
+Remove the default font size and weight for headings.
 */
 
 h1,
@@ -224,7 +224,7 @@ a {
 }
 
 /*
-Add the correct fontawsome weight in Edge and Safari.
+Add the correct font weight in Edge and Safari.
 */
 
 b,
@@ -233,10 +233,10 @@ strong {
 }
 
 /*
-1. Use the user's configured `mono` fontawsome-family by default.
-2. Use the user's configured `mono` fontawsome-feature-settings by default.
-3. Use the user's configured `mono` fontawsome-variation-settings by default.
-4. Correct the odd `em` fontawsome sizing in all browsers.
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
 */
 
 code,
@@ -254,7 +254,7 @@ pre {
 }
 
 /*
-Add the correct fontawsome size in all browsers.
+Add the correct font size in all browsers.
 */
 
 small {
@@ -297,7 +297,7 @@ table {
 }
 
 /*
-1. Change the fontawsome styles in all browsers.
+1. Change the font styles in all browsers.
 2. Remove the margin in Firefox and Safari.
 3. Remove default padding in all browsers.
 */
@@ -410,7 +410,7 @@ Remove the inner padding in Chrome and Safari on macOS.
 
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
-2. Change fontawsome properties to `inherit` in Safari.
+2. Change font properties to `inherit` in Safari.
 */
 
 ::-webkit-file-upload-button {
@@ -716,6 +716,11 @@ video {
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
+}
+
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
 }
 
 .bg-blue-300 {

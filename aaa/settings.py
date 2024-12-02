@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'aaa.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "mssql",
-        "NAME": "data",
+        "NAME": "django",
         "USER": "sa",
-        "PASSWORD": "9055",
+        "PASSWORD": "1234",
         "HOST": 'localhost',
         # "PORT": "1443",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server",
@@ -92,7 +92,7 @@ DATABASES = {
         "ENGINE": "mssql",
         "NAME": "data",
         "USER": "sa",
-        "PASSWORD": "9055",
+        "PASSWORD": "1234",
         "HOST": 'localhost',
         # "PORT": "1443",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server",
