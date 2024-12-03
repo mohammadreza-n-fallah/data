@@ -2,8 +2,8 @@
 {% load compress %}
 {% load static %}
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-{#    <script src="{% static 'jquery.min.js' %}"></script>#}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>#}
+    <script src="{% static 'jquery.min.js' %}"></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% compress css %}
         <link rel="stylesheet"
@@ -11,7 +11,7 @@
     {% endcompress %}
 </head>
 <body class="w-full">
-<div class="w-full   h-40 bg-gray-300 flex flex-col">
+<div class="w-full  h-40 bg-gray-300 flex flex-col">
     {#        <form method="post" enctype="multipart/form-data" action="{% url 'print' %}">#}
     {#            {% csrf_token %}#}
     {#            <input type="text" name="search">#}
@@ -122,8 +122,9 @@
 
 
 </table>
+<h2 class=" text-red-500 text-2xl text-center align-middle m-auto w-fit  z-10 bg-gray-700 rounded mt-4 " id="not_found"></h2>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>#}
 <script>
     {#const one = document.getElementById("sub");#}
     {#one.addEventListener("click",(e)=>{#}
@@ -191,7 +192,7 @@
                 rap.setAttribute("method", 'POST')
                 rap.setAttribute("enctype", '"multipart/form-data"')
                 {#inp.setAttribute("name", `${selected_index}`)#}
-                inp.setAttribute("name", `inp_field${count}`)
+                inp.setAttribute("name", `${selected_index}`)
                 inp.setAttribute("placeholder", `${selected_index}`)
                 inp.setAttribute("class", 'h-8 rounded ')
                 de_b.setAttribute("name", `but_a${count}`)
@@ -243,7 +244,7 @@
                 headers: {
                     'X-CSRFToken': "{{ csrf_token }}"
                 },
-                data: {
+                data:{
                     {#"salam":"ali",#}
                     "name": $('#inp-name').val(),
                     "family": $('#inp-family').val(),
@@ -257,44 +258,71 @@
                 },
 
                 success: function (data) {
-                    console.log(data);
-                    
-                                        // To avoid duplicates in zz
-                    let zz = [];
-                    for (let k in data) {
-                        if (!zz.includes(data[k])) {
-                            zz.push(data[k]);
+                    if (Array.isArray(data)){
+
+                        {#console.log(data);#}
+
+                                            // To avoid duplicates in zz
+                        let zz = [];
+                        for (let k in data) {
+                            if (!zz.includes(data[k])) {
+                                zz.push(data[k]);
+                            }
                         }
-                    }
-                
-                    // Build HTML content once
-                    let htmlContent = '';
-                    zz.forEach(row => {
-                        if (Array.isArray(row)) {
-                            row.forEach(cell => {
-                                if (Array.isArray(cell)) {
-                                    listContent=""
-                                    cell.forEach(li=>{
-                                        listContent += `<li>${li}</li>`;
-                                    })
-                                    htmlContent +=`<td>${listContent}</td>`
-                                    
-                                } else {
-                                    htmlContent += `<td>${cell}</td>`;
-                                }
+
+                        // Build HTML content once
+                        let htmlContent = '';
+                        zz.forEach(row => {
+                            if (Array.isArray(row)) {
+                                row.forEach(cell => {
+                                    if (Array.isArray(cell)) {
+                                        listContent=""
+                                        cell.forEach(li=>{
+                                            if ( li !== "NULL"){
+                                                console.log( (li))
+                                            
+                                            listContent += `<li>${li}</li>`;
+                                             }
+                                            else{
+                                                listContent += '';
+                                            
+                                            }
+                                        
+                                        })
+                                       
+                                        htmlContent +=`<td>${listContent}</td>`
+                                   
+                                        
+
+                                    } else {
+                                     if (cell!=='NULL'){
                                 
-                            
-                            });
-                        } 
-                        {#else {#}
-                        {#    htmlContent += `<td>${row}</td>`;#}
-                        {#}#}
-                    });
-                
-                    // Append to element with ID 'aj'
-                    document.getElementById("aj").innerHTML = htmlContent;
+                                        htmlContent += `<td>${cell}</td>`;
+                                         }
+                                      else{
+                                                htmlContent += `<td></td>`;
+                                            
+                                            }
+                                    }
+
+
+                                });
+                            }
+                            {#else {#}
+                            {#    htmlContent += `<td>${row}</td>`;#}
+                            {#}#}
+                        });
+
+                        // Append to element with ID 'aj'
+                        document.getElementById("aj").innerHTML = htmlContent;
+                        document.getElementById("not_found").innerHTML = "";
                     
-                 
+                    }
+                    else{
+                        document.getElementById("aj").innerHTML = "";
+
+                        document.getElementById("not_found").innerHTML = "not found anything";
+                        }
 
                     {#for ( let k in data){#}
                     {#    if (!(data[k] in zz)){#}

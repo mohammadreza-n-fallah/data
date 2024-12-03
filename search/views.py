@@ -1,4 +1,6 @@
+import base64
 import json
+import os
 
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
@@ -6,7 +8,7 @@ from django.shortcuts import render
 from django.views import View
 from sqlalchemy import *
 from sqlalchemy.dialects.mssql import NVARCHAR, INTEGER, FLOAT
-
+import pandas as pd
 
 def logged_in(f):
     # @wraps(f)
@@ -41,12 +43,27 @@ def db(request):
     # con5 = create_engine("mssql://@localhost/data?driver=ODBC Driver 17 for SQL Server")
     # conn5 = con5.connect()
     # aalltt = request.POST.get("namee")
+    from urllib.parse import unquote
+    from urllib.parse import parse_qs
     with con.connect() as connection:
+        data=request.body
+        nh=data.decode("utf-8")
+        decoded_data = unquote(data)
+        jjj=parse_qs(decoded_data)
+
+
+
+        fin={k:v[0] for k,v in jjj.items()}
+        print(jjj.keys())
+
+
+
         ff = request.POST.get("name", "")
         yy = request.POST.get("family", "")
         rr = request.POST.get("national_number", "")
         ee = request.POST.get("email", "")
         pp = request.POST.get("phone", "")
+
         # print(aalltt)
         print(ff)
         dddd = "data2"
@@ -54,7 +71,8 @@ def db(request):
         username = request.session.get("username")
         password = request.session.get("password")
         print(username)
-
+        fin["username"] = username
+        print(fin)
         # print(password)
         vb = text(f"SELECT name AS [text()] FROM sys.columns WHERE object_id = OBJECT_ID('dbo.data2') ")
         vm = connection.execute(vb)
@@ -66,11 +84,22 @@ def db(request):
             if l[0:-1] not in combined_li:
                 combined_li.append(l)
 
-        lo = text(
-            f"INSERT INTO {logg} (username,name,family,national_number,email,phone) VALUES (N'{username}',N'{ff}',N'{yy}',N'{rr}',N'{ee}',N'{pp}')")
-        print("lo", lo)
-        loo = connection.execute(lo)
-        connection.commit()
+        oo = [ff, yy, rr, ee, pp]
+        xx=[]
+        for f in range(len(oo)):
+            if oo[f] is not None:
+                xx.append(oo[f])
+        if len(fin)>1:
+            lo = text(f"INSERT INTO {logg} ({",".join(fin.keys())}) VALUES ({', '.join(f"N'{value}'" for value in fin.values())})")
+            print("lo", lo)
+            loo = connection.execute(lo)
+            connection.commit()
+
+        # lo = text(
+        #     f"INSERT INTO {logg} (username,name,family,national_number,email,phone) VALUES (N'{username}',N'{ff}',N'{yy}',N'{rr}',N'{ee}',N'{pp}')")
+        # print("lo", lo)
+        # loo = connection.execute(lo)
+        # connection.commit()
 
         kkss = text("""
     
@@ -164,10 +193,11 @@ def db(request):
         # result_datadict = [row for row in kl]
         # print(result_datadict)
 
-
-
-
-
+        # df = pd.DataFrame(kl)
+        # print(df)
+        # print(os. getcwd())
+        #
+        # df.to_csv(r"C:\Users\IR\Downloads\exported_data.csv", index=False)
         l2=[]
         l=[]
         for row in kl:
@@ -206,6 +236,12 @@ def db(request):
 
     return render(request, "index.html", {"lii": combined_li, })
     # return render(request, "index.html",)
+
+
+# class export(View):
+#     def get(self, request):
+
+
 
     # if ff and yy and rr:
     #     st = text(
